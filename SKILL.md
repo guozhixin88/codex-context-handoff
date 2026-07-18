@@ -1,6 +1,6 @@
 ---
 name: context-handoff
-description: "Safely hand a long, slow, or reconnecting Codex conversation to a fresh thread while preserving source and target conversation IDs, the actual workspace, Git branch, decisions, and next action. Use when the user invokes $context-handoff for a fresh thread that waits, invokes $context-handoff goal for a fresh thread that creates/starts a goal, asks to hand off a conversation, reports Reconnecting 5/5 or a very large transcript, or immediately accepts a handoff recommendation."
+description: "Safely hand a long, slow, or reconnecting Codex conversation to a fresh thread that waits for the user while preserving source and target conversation IDs, the actual workspace, Git branch, decisions, and next action. Use when the user invokes $context-handoff, asks to hand off a conversation and continue discussing, reports Reconnecting 5/5 or a very large transcript, or accepts a recommendation to continue in a fresh thread. Use $context-handoff-goal instead when the new thread should create/start a goal."
 ---
 
 # Context Handoff
@@ -10,9 +10,9 @@ Move the useful state of the current conversation into a fresh thread without co
 ## Select the mode
 
 - `$context-handoff` -> `continue`: create a fresh thread, present the received state, and wait for the user.
-- `$context-handoff goal` -> `direct_goal`: create a fresh thread, verify it, then create/start the goal.
+- `$context-handoff-goal` -> `direct_goal`: use the separately discoverable companion skill to create a fresh thread, verify it, then create/start the goal.
 
-The explicit command `$context-handoff` always means `continue`; never upgrade it to goal mode from surrounding context. A bare approval authorizes handoff only when it immediately follows one unambiguous visible handoff recommendation.
+The explicit command `$context-handoff` always means `continue`; never upgrade it to goal mode from surrounding context. Codex skill selectors list skill names, so `$context-handoff goal` is not a second menu item. A bare approval authorizes handoff only when it immediately follows one unambiguous visible handoff recommendation.
 
 ## Workflow
 

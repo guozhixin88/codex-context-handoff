@@ -10,9 +10,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "scripts" / "snapshot_workspace.py"
 MONITOR = ROOT / "hooks" / "context_handoff_monitor.py"
+CORE_SKILL = ROOT / "SKILL.md"
+GOAL_SKILL = ROOT / "context-handoff-goal" / "SKILL.md"
 
 
 class ContextHandoffTests(unittest.TestCase):
+    def test_goal_mode_is_a_separate_discoverable_skill(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        goal = GOAL_SKILL.read_text(encoding="utf-8")
+        self.assertIn("name: context-handoff-goal", goal)
+        self.assertIn("$context-handoff-goal", core)
+        self.assertIn("mode: direct_goal", goal)
+
     def test_snapshot_supports_non_git_directory(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
@@ -54,7 +63,7 @@ class ContextHandoffTests(unittest.TestCase):
                 )
 
             first = run("continue")
-            self.assertIn("$context-handoff goal", first.stdout)
+            self.assertIn("$context-handoff-goal", first.stdout)
             repeated = run("keep going")
             self.assertEqual(repeated.stdout, "")
 

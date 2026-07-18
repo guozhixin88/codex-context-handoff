@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context Handoff Goal"
+  short_description: "Hand a long conversation to a verified fresh thread, then create and start its goal."
+  default_prompt: "Use $context-handoff-goal to verify the current workspace, hand this conversation to a fresh thread, and create/start the goal there."

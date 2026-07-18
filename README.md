@@ -4,7 +4,7 @@
 
 > A lightweight Codex skill for moving long conversations into verified fresh threads without copying the bloated transcript.
 
-## 两个指令
+## 两个可搜索的技能
 
 ```text
 $context-handoff
@@ -13,10 +13,12 @@ $context-handoff
 新窗口继续讨论，默认也是最安全的模式。
 
 ```text
-$context-handoff goal
+$context-handoff-goal
 ```
 
 新窗口通过目录/分支预检后，直接创建目标并开始执行。
+
+Codex 的技能菜单只列出 `$skill-name`。因此 goal 模式使用独立名称 `$context-handoff-goal`，而不是不会作为第二个菜单项出现的 `$context-handoff goal`。
 
 ## 交接内容
 
@@ -32,10 +34,12 @@ $context-handoff goal
 
 ```bash
 git clone https://github.com/guozhixin88/codex-context-handoff.git \
-  "${CODEX_HOME:-$HOME/.codex}/skills/context-handoff"
+  "$HOME/.agents/skills/context-handoff"
+ln -s "$HOME/.agents/skills/context-handoff/context-handoff-goal" \
+  "$HOME/.agents/skills/context-handoff-goal"
 ```
 
-重新打开一个 Codex 对话后即可调用。
+重新打开一个 Codex 对话后，两个技能都会独立出现在 `$` 技能菜单中。如果已用旧方式安装，在仓库内执行 `git pull`，再只补充上面的 `ln -s` 即可。
 
 ## 可选：轻量自动提醒
 

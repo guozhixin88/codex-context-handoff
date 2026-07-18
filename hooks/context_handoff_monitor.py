@@ -151,7 +151,7 @@ def main() -> int:
         }.get(severity, "Treat this as a strong signal, not proof of root cause.")
         emit(
             f"{reason}. {urgency} Recommend exactly one command at the end of the response: "
-            "`$context-handoff` to continue discussing, or `$context-handoff goal` when the objective is ready for execution. "
+            "`$context-handoff` to continue discussing, or `$context-handoff-goal` when the objective is ready for execution. "
             "Do not interrupt critical work and do not scan transcript or log contents."
         )
         return 0
