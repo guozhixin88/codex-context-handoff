@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.codex/skills/context-handoff/hooks/context_handoff_monitor.py",
+            "timeout": 2
+          }
+        ]
+      }
+    ]
+  }
+}
