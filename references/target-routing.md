@@ -35,3 +35,13 @@ Source and target are independent:
 ## Preflight order
 
 Before creating the target, snapshot its locator and content state. In the target, verify the exact real path, repository root, Git directory/common directory, local branch, HEAD, dirty manifest, operation/lock state, and worktree occupancy before reading project instructions or starting a Goal. A mismatch keeps the handoff incomplete.
+
+## Codex task-binding capability gate
+
+Resolve workspace identity separately from task-creation capability:
+
+- An exact existing worktree is a valid destination only when the new Codex task can register that exact path as its native `cwd`.
+- Match the resolved path against the paths returned by the available project-listing tool. A parent repository project is not an exact match for its linked worktree.
+- Do not hide a binding mismatch by running the target's commands with an explicit `workdir`. The first target probe must run from the task's native directory, and thread metadata must report the same path.
+- If the runtime can only create a task at the parent checkout, stop automatic creation and return a paste-ready prompt for a manually opened task at the exact worktree.
+- Creating a new worktree is a separate operation and requires explicit user authorization. It is not a fallback for reusing an existing worktree.

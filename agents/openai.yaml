@@ -1,7 +1,7 @@
 interface:
   display_name: "Context Handoff"
-  short_description: "Hand context to a verified thread or worktree."
-  default_prompt: "Use $context-handoff to hand this context to the correct verified thread or worktree, then wait for me there."
+  short_description: "Hand minimal context to one verified task owner."
+  default_prompt: "Use $context-handoff to hand the five-point task state to a fresh task in the exact verified workspace, then wait there."
 
 policy:
   allow_implicit_invocation: true

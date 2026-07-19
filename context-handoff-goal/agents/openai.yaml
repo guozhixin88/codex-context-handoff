@@ -1,4 +1,4 @@
 interface:
   display_name: "Context Handoff Goal"
-  short_description: "Hand context to the right worktree and start its goal."
-  default_prompt: "Use $context-handoff-goal to hand this context to the correct verified thread or worktree and start the concrete goal there."
+  short_description: "Hand to one verified owner and start its Goal."
+  default_prompt: "Use $context-handoff-goal to hand the five-point task state to the exact verified workspace and start one Goal there."

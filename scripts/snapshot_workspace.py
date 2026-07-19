@@ -225,9 +225,11 @@ def main() -> int:
         locator_id = sha256_json(locator_basis)
         payload = {
             "ok": True,
+            "cwd": str(cwd),
             "requested_cwd": str(requested),
             "resolved_cwd": str(cwd),
             "git": None,
+            "workspace_id": locator_id,
             "workspace_locator_id": locator_id,
             "snapshot_id": sha256_json({**locator_basis, "mtime_ns": info.st_mtime_ns}),
         }
@@ -314,6 +316,7 @@ def main() -> int:
     }
     payload = {
         "ok": True,
+        "cwd": str(cwd),
         "requested_cwd": str(requested),
         "resolved_cwd": str(cwd),
         "git": {
@@ -342,6 +345,7 @@ def main() -> int:
             "operations_in_progress": operations,
             "locks": locks,
         },
+        "workspace_id": locator_id,
         "workspace_locator_id": locator_id,
         "snapshot_id": sha256_json(snapshot_basis),
     }

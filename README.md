@@ -1,8 +1,8 @@
 # Codex Context Handoff
 
-一个轻量的 Codex Skill：把对话、分析结论或任务状态安全交给全新线程。既支持“长对话原地换窗”，也支持“外部研究完成后，定向交到指定项目、分支或现有 worktree”。
+一个轻量的 Codex Skill：把对话、分析结论或任务状态安全交给全新任务，同时保证目标目录正确、后续只有一个执行者。
 
-> A lightweight Codex skill for handing conversation state or research results to a verified fresh thread, including an explicitly directed project, branch, or existing worktree.
+> A lightweight Codex skill for handing minimal task state to one verified owner in the exact target workspace.
 
 ## 两个独立、可直接调用的技能
 
@@ -39,12 +39,15 @@ $context-handoff-goal
 
 ## 交接内容
 
-- 源对话 ID 与目标对话 ID（运行环境可提供时）。
-- 稳定的 `handoff_id` 和每次重试独立的 `attempt_id`。
-- 来源工作区和目标工作区的独立快照。
-- 真实目录、仓库、Git/worktree 身份、本地分支、HEAD 和 dirty 内容指纹。
-- 当前目标、关键决策、被排除方案、剩余事项、约束和验收条件。
-- 外部来源的 URL、版本/commit、许可证或 clean-room 边界（相关时）。
+交接包围绕五个问题：
+
+- 当前正在做什么。
+- 已经完成了什么，以及验证证据。
+- 卡在哪里或还有什么不确定。
+- 下一步做什么。
+- 哪些坑、错误路线或约束不能再踩。
+
+除此之外只增加安全恢复必需的信息：源/目标对话 ID、精确目录、仓库、worktree、本地分支、HEAD、dirty 状态和一个稳定的 `handoff_id`。
 
 不会复制完整对话，也不会上传会话内容。
 
@@ -58,7 +61,9 @@ $context-handoff-goal
 - 不自动创建、切换或删除 worktree。
 - 不把提示词 fallback 冒充成已经完成的线程交接或原生 Goal。
 
-目标线程开始前会二次核验目录、仓库、worktree、本地分支、HEAD、dirty 内容、Git 操作/冲突和锁。关键 Git 探针失败时按“未知且不安全”处理，不会误报为 clean。
+目标任务开始前会二次核验其真正登记的目录、仓库、worktree、本地分支、HEAD、dirty 内容、Git 操作/冲突和锁。仅仅让一条命令临时进入正确目录，不算任务已经绑定到该目录。
+
+交接完成后，旧任务不再监控、测试、复核、提交、推送或替新任务宣布完成。
 
 ## 安装
 
@@ -89,7 +94,9 @@ ln -s "$HOME/.agents/skills/context-handoff/context-handoff-goal" \
 ## 能力边界
 
 - 自动创建/验证新线程依赖当前 Codex 运行环境是否提供线程工具。
-- 如果线程工具不可用，Skill 会生成可直接粘贴到新窗口的完整提示词，并明确标记尚未自动完成。
+- 当前任务创建接口不一定能绑定任意一个已经存在的 linked worktree。目标 worktree 没有被 Codex 单独登记时，Skill 会停止自动创建，并生成应粘贴到该精确目录新任务中的提示词；不会退回父项目主目录冒充成功。
+- 当前 Goal 接口不一定提供暂停或转移旧 Goal 的能力。旧 Goal 仍 active 时，Skill 不会启动第二个 Goal；目标只完成预检并等待旧 Goal 被释放。
+- 如果线程工具不可用或真实绑定无法验证，Skill 会生成可直接粘贴到新窗口的完整提示词，并明确标记尚未自动完成。
 - 对话 ID 不可读取时写 `null`，绝不猜测。
 - Skill 不能迁移浏览器登录态、运行进程、端口或未持久化工具状态。
 - 原生 Goal 只有在目标线程能够启动并回读验证时才会标记为成功。

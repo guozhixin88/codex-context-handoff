@@ -51,19 +51,49 @@ class ContextHandoffTests(unittest.TestCase):
         goal = GOAL_SKILL.read_text(encoding="utf-8")
         self.assertIn("name: context-handoff-goal", goal)
         self.assertIn("$context-handoff-goal", core)
-        self.assertIn("after.mode: goal", goal)
+        self.assertIn("`mode: goal`", goal)
 
-    def test_skills_separate_why_where_after_and_source_target(self) -> None:
+    def test_core_uses_five_point_handoff_and_exact_identity(self) -> None:
         core = CORE_SKILL.read_text(encoding="utf-8")
-        self.assertIn("`why`", core)
-        self.assertIn("`where`", core)
-        self.assertIn("`after`", core)
+        self.assertIn("doing:", core)
+        self.assertIn("completed:", core)
+        self.assertIn("blocked:", core)
+        self.assertIn("next:", core)
+        self.assertIn("pitfalls:", core)
         self.assertIn("source:", core)
         self.assertIn("target:", core)
-        self.assertIn("mode: context_only", core)
-        self.assertIn("Never choose a target merely because", core)
-        self.assertIn("Never use recency, the main checkout", core)
+        self.assertIn("workspace:", core)
         self.assertTrue(ROUTING.exists())
+
+    def test_active_source_goal_never_creates_concurrent_goal(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        goal = GOAL_SKILL.read_text(encoding="utf-8")
+        self.assertIn("Use `get_goal`", core)
+        self.assertIn("do not start a second native Goal", core)
+        self.assertIn("awaiting_source_goal_release", core)
+        self.assertIn("Never complete the source Goal merely because it was delegated", goal)
+        self.assertIn("never run source and target Goals concurrently", goal)
+
+    def test_target_binding_cannot_be_faked_by_command_workdir(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        routing = ROUTING.read_text(encoding="utf-8")
+        self.assertIn("registered `cwd`", core)
+        self.assertIn("without a `workdir` override", core)
+        self.assertIn("does not prove the thread is bound there", core)
+        self.assertIn("A parent repository project is not an exact match", routing)
+        self.assertIn("stop automatic creation", routing)
+
+    def test_source_has_zero_business_work_after_receipt(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        goal = GOAL_SKILL.read_text(encoding="utf-8")
+        self.assertIn("The source must not monitor the target", core)
+        self.assertIn("performs zero business work", goal)
+
+    def test_discussion_does_not_invoke_the_skill(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        goal = GOAL_SKILL.read_text(encoding="utf-8")
+        self.assertIn("Do not execute merely because", core)
+        self.assertIn("Do not execute merely because", goal)
 
     def test_snapshot_supports_non_git_directory(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
