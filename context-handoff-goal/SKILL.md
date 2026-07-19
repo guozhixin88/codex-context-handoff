@@ -1,24 +1,24 @@
 ---
 name: context-handoff-goal
-description: "Safely hand a long, slow, or reconnecting Codex conversation to a fresh thread and create/start a concrete goal after verifying the real workspace and Git branch. Use when the user invokes $context-handoff-goal or explicitly asks to hand off and immediately execute a well-defined objective. This is the directly discoverable goal-mode companion to $context-handoff. Do not use when requirements still need discussion."
+description: "Safely hand a Codex conversation, research result, or task state to a fresh thread in the current or user-directed project, branch, or existing worktree, then start a concrete goal after exact target verification. Use when the user invokes $context-handoff-goal or explicitly asks to move context and immediately execute a well-defined objective. Use $context-handoff when the new thread should wait for more discussion."
 ---
 
 # Context Handoff Goal
 
-Run the shared context-handoff workflow in `direct_goal` mode. This companion has a separate skill name because Codex skill selectors list `$skill-name`; text after a space is prompt content, not another skill entry.
+Run the shared context-handoff workflow with `after.mode: goal`. This separate discoverable skill exists because Codex skill selectors list `$skill-name`; text after a space is prompt content, not a second skill entry.
 
 ## Workflow
 
-1. Read the core skill completely from the first existing relative path: `../context-handoff/SKILL.md` for sibling installation, then `../SKILL.md` for a nested public-repository installation. Follow its workspace snapshot, conversation-ID, fresh-thread, preflight, verification, and safety requirements.
-2. Set `mode: direct_goal`. Never reinterpret this explicit skill as `continue`.
-3. Confirm the objective and acceptance criteria are concrete enough to execute. If one missing fact would materially change the work, ask one concise question before creating the target.
-4. Create a fresh target thread in the verified latest real directory and current branch. Do not fork the source history or create a branch/worktree unless explicitly requested.
-5. After the target independently passes preflight, create/start the goal there. Return the source ID -> target ID receipt only after target verification succeeds.
-
-If the runtime cannot create or inspect threads, return a paste-ready `direct_goal` handoff prompt and clearly state that automatic handoff and goal creation did not complete.
+1. Read the core skill completely from the first existing path: `../context-handoff/SKILL.md` for sibling installation, then `../SKILL.md` for a nested public-repository installation.
+2. Keep `why`, `where`, and `after` independent. Both skills support the same source/target routing; this companion changes only `after.mode` from `wait` to `goal`.
+3. Confirm the objective and observable acceptance criteria are concrete. Ask one concise question only when a missing fact would materially change direction, safety, cost, or acceptance.
+4. Reach a safe stopping point and best-effort freeze the source before transferring write ownership.
+5. Resolve an exact target and perform target-side preflight using the shared workflow. Never start execution in a guessed project, branch, or worktree.
+6. Start a native Goal only when the target can activate and verify native Goal state. Otherwise return an explicit `goal_prompt_only_fallback`; never report it as a native Goal.
+7. Return the source ID -> target ID receipt only after target verification succeeds. If creation or verification fails, do not leave the source falsely frozen.
 
 ## Safety
 
-- Never guess conversation IDs, directories, branches, or repository state.
-- Never stash, commit, reset, clean, checkout, archive, or delete work merely to hand off.
-- Never start the goal before the target workspace preflight passes.
+- Default to `transfer.mode: context_only`; handoff does not authorize Git push, cherry-pick, file copying, commit, stash, checkout, or worktree creation.
+- Do not execute on detached HEAD, unresolved conflicts, an in-progress Git operation, an unknown/changed dirty snapshot, or a target with another active writer.
+- Never guess conversation IDs, directories, branches, repositories, Goal state, or completion.

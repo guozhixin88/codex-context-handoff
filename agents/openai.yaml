@@ -1,7 +1,7 @@
 interface:
   display_name: "Context Handoff"
-  short_description: "Move long Codex conversations into verified fresh threads."
-  default_prompt: "Use $context-handoff to move this conversation into a verified fresh thread and wait for me there."
+  short_description: "Hand context to a verified thread or worktree."
+  default_prompt: "Use $context-handoff to hand this context to the correct verified thread or worktree, then wait for me there."
 
 policy:
   allow_implicit_invocation: true

@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.codex/skills/context-handoff/hooks/context_handoff_monitor.py",
+            "command": "python3 ~/.agents/skills/context-handoff/hooks/context_handoff_monitor.py",
             "timeout": 2
           }
         ]
