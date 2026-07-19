@@ -4,7 +4,9 @@
 
 > A lightweight Codex skill for handing conversation state or research results to a verified fresh thread, including an explicitly directed project, branch, or existing worktree.
 
-## 两个可搜索的技能
+## 两个独立、可直接调用的技能
+
+下面两个 Skill 是并列入口。需要哪种交接结果，直接调用对应的完整技能名即可；不需要先调用另一个，也不是“一个技能加一个参数”。
 
 ```text
 $context-handoff
@@ -18,7 +20,7 @@ $context-handoff-goal
 
 目标工作区核验通过后，直接创建并启动一个明确 Goal。
 
-Codex 的技能菜单只列出 `$skill-name`，所以 Goal 模式使用独立名称 `$context-handoff-goal`，而不是不会形成第二个菜单项的 `$context-handoff goal`。
+请直接使用 `$context-handoff` 或 `$context-handoff-goal`。`$context-handoff goal` 不是技能指令。
 
 ## 支持的交接场景
 
