@@ -6,7 +6,7 @@
 
 ## 两个独立、可直接调用的技能
 
-下面两个 Skill 是并列入口。需要哪种交接结果，直接调用对应的完整技能名即可；不需要先调用另一个，也不是“一个技能加一个参数”。
+下面两个 Skill 都可以直接调用，按需要选择即可。
 
 ```text
 $context-handoff
@@ -19,8 +19,6 @@ $context-handoff-goal
 ```
 
 目标工作区核验通过后，直接创建并启动一个明确 Goal。
-
-请直接使用 `$context-handoff` 或 `$context-handoff-goal`。`$context-handoff goal` 不是技能指令。
 
 ## 支持的交接场景
 
