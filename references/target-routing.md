@@ -21,7 +21,7 @@ When a project-only selector produces multiple candidates, present the exact bra
 - If a branch is already occupied, reuse that exact worktree after preflight; do not switch the main checkout.
 - Treat `main`, `origin/main`, and another remote's `main` as different refs. A remote-only branch is not a local execution target.
 - Do not execute in locked, prunable, conflicted, or Git-operation-in-progress worktrees.
-- `continue` may open an exact dirty target, disclose it, and wait. `direct_goal` requires known provenance, a stable content snapshot, compatible scope, and no competing writer.
+- `wait` may open an exact dirty target, disclose it, and wait. `goal` requires known provenance, a stable content snapshot, compatible scope, and no competing writer.
 
 ## Source, target, and transfer
 

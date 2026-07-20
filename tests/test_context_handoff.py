@@ -14,6 +14,7 @@ MONITOR = ROOT / "hooks" / "context_handoff_monitor.py"
 CORE_SKILL = ROOT / "SKILL.md"
 GOAL_SKILL = ROOT / "context-handoff-goal" / "SKILL.md"
 ROUTING = ROOT / "references" / "target-routing.md"
+HANDOFF_TEMPLATE = ROOT / "assets" / "handoff-template.md"
 
 
 def run_json(command: list[str], **kwargs) -> tuple[subprocess.CompletedProcess[str], dict]:
@@ -88,6 +89,27 @@ class ContextHandoffTests(unittest.TestCase):
         goal = GOAL_SKILL.read_text(encoding="utf-8")
         self.assertIn("The source must not monitor the target", core)
         self.assertIn("performs zero business work", goal)
+
+    def test_knowledge_cleanup_is_optional_and_precedes_snapshot(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        goal = GOAL_SKILL.read_text(encoding="utf-8")
+        self.assertIn("If `neat-freak` is available", core)
+        self.assertIn("Do not install `neat-freak` automatically", core)
+        self.assertIn("Skip cleanup for conversation-only handoffs", core)
+        self.assertLess(core.index("**Prepare knowledge conditionally.**"), core.index("**Take the final snapshot without mutation.**"))
+        self.assertIn("conditional knowledge-preparation rule", goal)
+
+    def test_handoff_markdown_is_always_rendered_but_file_is_conditional(self) -> None:
+        core = CORE_SKILL.read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("Always render the five-point state as a compact Markdown handoff note", core)
+        self.assertIn("Do not create a repository file for a transient discussion", core)
+        self.assertIn("docs/handoffs/YYYY-MM-DD-<topic>.md", core)
+        self.assertIn("公开版不依赖 `neat-freak`", readme)
+        self.assertTrue(HANDOFF_TEMPLATE.exists())
+        template = HANDOFF_TEMPLATE.read_text(encoding="utf-8")
+        for heading in ("## Current work", "## Completed", "## Blocked or uncertain", "## Next", "## Pitfalls"):
+            self.assertIn(heading, template)
 
     def test_discussion_does_not_invoke_the_skill(self) -> None:
         core = CORE_SKILL.read_text(encoding="utf-8")
